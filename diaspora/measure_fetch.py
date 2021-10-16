@@ -14,8 +14,7 @@ PATH_TESTS: List[PathTest] = [
         cookies=COOKIES, content_snippet="yay!", headers=JSON_HEADERS),
 
     # Unauthorized post.
-    PathTest("/posts/33000003", cookies=COOKIES, content_snippet="The page you
-        were looking for doesn't exist (404)", status_code=404),
+    PathTest("/posts/33000003", cookies=COOKIES, content_snippet="The page you were looking for doesn't exist (404)", status_code=404),
 
     # Complex post.
     PathTest("/posts/33000071", cookies=COOKIES, content_snippet="A fourth poll!"),
