@@ -1,0 +1,10 @@
+from typing import Dict
+
+
+DOMAIN = "https://spree.internal"
+COOKIES: Dict[str, str] = {
+    "_sandbox_session": "egIEceCgtwcYXnBNRDs/MzMxerJLLI4nkZ6UFN3oWY+Uw9rY5adbXjEVOj+KIVSZNBIFMz7DWOOq73qHR9HXp5m4ofXWRBcvqM9+sJhnZe1t132Nrvzcy4K8yOPdctRL+bMQSgIaNpTa0X4fNybd9SbaBkNX4BBUcAdP2ojKTMQECyL0fclAjM5RUa1ue1xDIeRYyEMvnfvHWEN71hivEZ0mceQBECYgt9f4WuCl6x1g5wuO0zj+oLpJTERNCXImZBKn2BWGusO85zyZXS3hceQEcnCB8fW2wEld3qp5MMmh3wbdQuUJksoFIcdF5VrmsZBQ4N6fG7tcwV+PmbiiBQwMbFdbWZn3Gj4Sl9J2O2jS7x4FxeajXxDU5GyXD/qF4rNWe1LqRf2cKkGZDm40JARgzBh2EH1ZARvsiukYB9Yn7ivi+NrUpQQpum3wIvGk--cbHFbOfGWg9O5D/u--fdGZIYkKPuPRWL1Szm7w+g==",
+    "guest_token": "eyJfcmFpbHMiOnsibWVzc2FnZSI6IklqQjJiVFJEY25BemR6ZGhka3RoZG1OTGNtcDZiM2N4TmpNM05qazBOekUyTXprMklnPT0iLCJleHAiOm51bGwsInB1ciI6ImNvb2tpZS5ndWVzdF90b2tlbiJ9fQ==--799c966d3f6662e9dacdc4e12471b1f0f9c7ed36",
+    "token": "eyJfcmFpbHMiOnsibWVzc2FnZSI6IklqQjJiVFJEY25BemR6ZGhka3RoZG1OTGNtcDZiM2N4TmpNM05qazBOekUyTXprMklnPT0iLCJleHAiOm51bGwsInB1ciI6ImNvb2tpZS50b2tlbiJ9fQ==--75cb68024e2e0571cf36aa8a22372df4ffe44fbb",
+}
+
