@@ -10,7 +10,7 @@ PATH_TESTS: List[PathTest] = [
         PathTest("/account", cookies=COOKIES, content_snippet="123 Home Avenue"),
         PathTest("/en/account_link?currency=USD", cookies=COOKIES, content_snippet="MY ACCOUNT"),
         PathTest("/api_tokens", cookies=COOKIES, content_snippet="order_token", headers=JSON_HEADERS),
-        PathTest("/en/cart_link?currency=USD", cookies=COOKIES, content_snippet="cart-icon", headers=JSON_HEADERS),
+        PathTest("/en/cart_link?currency=USD", cookies=COOKIES, content_snippet="cart-icon"),
 
         # Available item -- Polo T Shirt.
         PathTest("/products/polo-t-shirt", cookies=COOKIES, content_snippet="Polo T Shirt"),
