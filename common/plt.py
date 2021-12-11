@@ -2,7 +2,7 @@
 import argparse
 import sys
 from time import time, sleep
-from typing import NamedTuple, Dict
+from typing import NamedTuple, Dict, List
 import urllib.parse
 
 from selenium import webdriver
@@ -29,6 +29,8 @@ def measure(tag: str, driver, domain: str, path_test: PathTest) -> float:
 
 
 def do_measure(domain: str, path_tests: List[PathTest]) -> None:
+    path_tests = [pt for pt in path_tests if pt.is_page_main]
+
     parser = argparse.ArgumentParser(description="Measure page load times.")
     parser.add_argument("tag", type=str, help="identifier for this run")
     parser.add_argument("--warmup-rounds", type=int, default=100, help="number of page loads to perform for warm up")
@@ -55,7 +57,7 @@ def do_measure(domain: str, path_tests: List[PathTest]) -> None:
         for i in trange(args.measure_rounds, desc="measure"):
             for pi, path_test in enumerate(path_tests):
                 ts = time()
-                plt_ms = measure(tag, driver, page)
+                plt_ms = measure(tag, driver, domain, path_test)
                 print(f"{tag},{path_test.path},{i},{ts},{plt_ms:3g}", flush=True)
     finally:
         driver.close()

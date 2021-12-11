@@ -17,6 +17,7 @@ class PathTest(NamedTuple):
     content_snippet: str = None  # To make sure the correct content is fetched.
     headers: Dict[str, str] = None
     status_code: int = 200
+    is_page_main: bool = False  # True if this is a workload's main URL.
     tag2sleep_s: Dict[str, int] = None
 
 
