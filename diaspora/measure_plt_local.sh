@@ -11,6 +11,7 @@ cp common/cache.rbenv-vars ~/diaspora/.rbenv-vars
 
 ~/start_diaspora.sh production_mod_checked &
 sleep 40
+numactl -N 1 -m 1 python3 diaspora/measure_fetch.py "cached" --warmup-rounds 1 --measure-rounds 0
 numactl -N 1 -m 1 python3 diaspora/measure_plt.py "cached" --warmup-rounds "$rounds" --measure-rounds "$rounds" >> "$output_dir/cached.csv"
 
 ~/start_diaspora.sh production_mod &

@@ -11,21 +11,22 @@ cp common/cache.rbenv-vars ~/Autolab/.rbenv-vars
 
 ~/start_server.sh production_mod_checked &
 sleep 30
-numactl -N 1 -m 1 python3 autolab/measure_plt.py "cached" --warmup-rounds "$rounds" --measure-rounds "$rounds" >> "$output_dir/cached"
+numactl -N 1 -m 1 python3 autolab/measure_fetch.py "cached" --warmup-rounds 1 --measure-rounds 0
+numactl -N 1 -m 1 python3 autolab/measure_plt.py "cached" --warmup-rounds "$rounds" --measure-rounds "$rounds" >> "$output_dir/cached.csv"
 
 ~/start_server.sh production_mod &
 sleep 30
-numactl -N 1 -m 1 python3 autolab/measure_plt.py "modified" --warmup-rounds "$rounds" --measure-rounds "$rounds" >> "$output_dir/modified"
+numactl -N 1 -m 1 python3 autolab/measure_plt.py "modified" --warmup-rounds "$rounds" --measure-rounds "$rounds" >> "$output_dir/modified.csv"
 
 ~/start_server.sh production &
 sleep 30
-numactl -N 1 -m 1 python3 autolab/measure_plt.py "original" --warmup-rounds "$rounds" --measure-rounds "$rounds" >> "$output_dir/original"
+numactl -N 1 -m 1 python3 autolab/measure_plt.py "original" --warmup-rounds "$rounds" --measure-rounds "$rounds" >> "$output_dir/original.csv"
 
 # # Cache disabled.
 # cp common/no-cache.rbenv-vars ~/Autolab/.rbenv-vars
 # ~/start_server.sh production_mod_checked &
 # sleep 30
-# numactl -N 1 -m 1 python3 autolab/measure_plt.py "no-cache" --warmup-rounds "$rounds" --measure-rounds "$rounds" >> "$output_dir/no-cache"
+# numactl -N 1 -m 1 python3 autolab/measure_plt.py "no-cache" --warmup-rounds "$rounds" --measure-rounds "$rounds" >> "$output_dir/no-cache.csv"
 
 # sudo shutdown -h now
 

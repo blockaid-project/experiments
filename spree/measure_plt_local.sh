@@ -11,6 +11,7 @@ cp common/cache.rbenv-vars ~/spree/sandbox/.rbenv-vars
 
 ~/start_spree.sh production_mod_checked &
 sleep 60
+numactl -N 1 -m 1 python3 spree/measure_fetch.py "cached" --warmup-rounds 1 --measure-rounds 0
 numactl -N 1 -m 1 python3 spree/measure_plt.py "cached" --warmup-rounds "$rounds" --measure-rounds "$rounds" >> "$output_dir/cached.csv"
 
 ~/start_spree.sh production_mod &
