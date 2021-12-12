@@ -21,12 +21,14 @@ def measure(tag: str, driver, domain: str, path_test: PathTest) -> float:
 
     start_s = time()
     driver.get(full_url)
-    get_time_ms = (time() - start_s) * 1e3
+
     download_file_name = path_test.download_file_name
     if download_file_name:
-        assert os.path.exists(download_file_name)
+        while not os.path.exists(download_file_name):
+            pass
+        download_time_ms = (time() - start_s) * 1e3
         os.remove(download_file_name)
-        return get_time_ms
+        return download_time_ms
 
     navigation_start = driver.execute_script("return window.performance.timing.navigationStart")
     load_event_end = driver.execute_script("return window.performance.timing.loadEventEnd")
