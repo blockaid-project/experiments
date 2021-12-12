@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+import os.path
 import sys
 from time import time, sleep
 from typing import NamedTuple, Dict, List
@@ -18,7 +19,15 @@ def measure(tag: str, driver, domain: str, path_test: PathTest) -> float:
     for name, value in path_test.cookies.items():
         driver.add_cookie({"name": name, "value": value})
 
+    start_s = time()
     driver.get(full_url)
+    get_time_ms = (time() - start_s) * 1e3
+    download_file_name = path_test.download_file_name
+    if download_file_name:
+        assert os.path.exists(download_file_name)
+        os.remove(download_file_name)
+        return get_time_ms
+
     navigation_start = driver.execute_script("return window.performance.timing.navigationStart")
     load_event_end = driver.execute_script("return window.performance.timing.loadEventEnd")
     source = driver.page_source

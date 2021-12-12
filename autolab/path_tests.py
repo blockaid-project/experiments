@@ -14,7 +14,7 @@ PATH_TESTS: List[PathTest] = [
 
     PathTest("/courses/Course0/assessments/quiz4", cookies=STUDENT_COOKIES, content_snippet="user0@foo.bar_0_handin.c", is_page_main=True, tag2sleep_s=DEFAULT_SLEEP),
 
-    PathTest("/courses/Course0/assessments/quiz4/submissions/26000028/download", cookies=STUDENT_COOKIES, content_snippet="printf", is_page_main=True, tag2sleep_s=DEFAULT_SLEEP),
+    PathTest("/courses/Course0/assessments/quiz4/submissions/26000028/download", cookies=STUDENT_COOKIES, content_snippet="printf", is_page_main=True, download_file_name="user0@foo.bar_quiz4_0_handin.c"),
 
     PathTest("/courses/Course0/assessments/quiz4/viewGradesheet", cookies=INSTRUCTOR_COOKIES, content_snippet="user40@foo.bar", is_page_main=True, tag2sleep_s=DEFAULT_SLEEP)
 ]

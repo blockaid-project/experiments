@@ -19,6 +19,7 @@ class PathTest(NamedTuple):
     status_code: int = 200
     is_page_main: bool = False  # True if this is a workload's main URL.
     tag2sleep_s: Dict[str, int] = None
+    download_file_name: str = None # If not None, the URL is a file download.
 
 
 JSON_HEADERS = {"Accept": "application/json, text/javascript", "X-Requested-With": "XMLHttpRequest"}
