@@ -5,7 +5,7 @@ from common.measure_fetch import PathTest, JSON_HEADERS
 from constants import COOKIES
 
 
-DEFAULT_SLEEP = {"original": .2, "modified": .2, "cached": .2, "no-cache": 0}
+DEFAULT_SLEEP = {"original": .2, "modified": .2, "cached": .2, "no-cache": 3}
 PATH_TESTS: List[PathTest] = [
         # Account.
         PathTest("/account", cookies=COOKIES, content_snippet="123 Home Avenue", is_page_main=True, tag2sleep_s=DEFAULT_SLEEP),
