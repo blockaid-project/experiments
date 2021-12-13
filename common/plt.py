@@ -61,7 +61,7 @@ def do_measure(domain: str, path_tests: List[PathTest]) -> None:
 
         for _ in trange(args.warmup_rounds, desc="warmup"):
             for pi, path_test in enumerate(path_tests):
-                measure(tag, driver, path_test)
+                measure(tag, driver, domain, path_test)
 
         print("# " + " ".join(sys.argv))
         print("tag,path,round,ts,plt_ms")
