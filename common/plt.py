@@ -19,15 +19,26 @@ def measure(tag: str, driver, domain: str, path_test: PathTest) -> float:
     for name, value in path_test.cookies.items():
         driver.add_cookie({"name": name, "value": value})
 
+    download_file_name = path_test.download_file_name
+    if download_file_name:
+        try:
+            os.remove(download_file_name)
+        except OSError:
+            pass
+
     start_s = time()
     driver.get(full_url)
 
-    download_file_name = path_test.download_file_name
     if download_file_name:
         while not os.path.exists(download_file_name):
             pass
+        while True:
+            with open(download_file_name, "r") as f:
+                if path_test.content_snippet in f.read():
+                    break
         download_time_ms = (time() - start_s) * 1e3
-        os.remove(download_file_name)
+
+
         return download_time_ms
 
     navigation_start = driver.execute_script("return window.performance.timing.navigationStart")
