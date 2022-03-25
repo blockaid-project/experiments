@@ -1,0 +1,78 @@
+---
+domain: "https://diaspora.internal"
+cookies: &COOKIES
+  _diaspora_session: "KzhPSEF3eS9yRS9PWXY0U2MrZlhKWW5uKzNWdEhuN2FzbW1ZdmdVemhQZndvajFmWUl4c3FxelRMbDRtRDJhV0pJVkQ3eXpESkptNSswV0toK21rMzN2ZEpQNERsdUtFSWVJTlVLMWN0MmRIS3VBdlBlK2YzMjNPTUMxc0h6R3VlRFNrRmJlblRsSld1WnBGaWRiYjN6MGcxZVNTTXVNV3hJSUhhbmdNYmx5dW5rd0d5TEpFWUZ5b1NhQWhUNjdsMkNTZy9lc1ZOaTUzeFJtZkE4Y0FTZDdXMzlCYlFZUmQyY2xUSDkwSUdObzhsUyswYklWWHpNOHVKVkZoRXhjeDk5NnJ6VXR4QUxuLytHOWxWVVluOXNuWmhtdno3SS9wVG1HaFZwZVRCTFU9LS01WHhWSnhUZlFVSTlUVk42cncxb213PT0%3D--f066e736fac3f76a5db23fa678a091cf01223660"
+json_headers: &JSON_HEADERS
+  Accept: "application/json, text/javascript"
+  X-Requested-With: "XMLHttpRequest"
+path_tests:
+  # Simple post.
+  - path: "/posts/33000073"
+    path_abbreviation: ""
+    cookies: *COOKIES
+    content_snippet: "Here's a post for my #family."
+    is_page_main: true
+    page_name: "Simple post"
+    tag2sleep_s: {"original": .3, "modified": .3, "cached": .3, "no-cache": 5}
+  - path: "/notifications?per_page=10&page=1&_=1618953548170"
+    path_abbreviation: ""
+    cookies: *COOKIES
+    content_snippet: "unread_count"
+    headers: *JSON_HEADERS
+  - path: "/posts/33000073/comments?_=1620113426256"
+    path_abbreviation: ""
+    cookies: *COOKIES
+    content_snippet: "yay!"
+    headers: *JSON_HEADERS
+
+  # Complex post.
+  # Duplicates omitted:
+  #    Notifications.
+  - path: "/posts/33000071"
+    path_abbreviation: ""
+    cookies: *COOKIES
+    content_snippet: "A fourth poll!"
+    is_page_main: true
+    page_name: "Complex post"
+    tag2sleep_s: {"original": .3, "modified": .3, "cached": .3, "no-cache": 16}
+  - path: "/posts/33000071/comments?_=1620109750030"
+    path_abbreviation: ""
+    cookies: *COOKIES
+    content_snippet: "Nice poll!"
+    headers: *JSON_HEADERS
+
+  # Prohibited post.
+  - path: "/posts/33000003"
+    path_abbreviation: ""
+    cookies: *COOKIES
+    content_snippet: "The page you were looking for doesn't exist (404)"
+    status_code: 404
+    is_page_main: true
+    page_name: "Prohibited post"
+    tag2sleep_s: {"original": .1, "modified": .1, "cached": .1, "no-cache": .1}
+
+  # Conversation
+  # Duplicates omitted:
+  #    Notifications.
+  - path: "/conversations?conversation_id=12000002"
+    path_abbreviation: ""
+    cookies: *COOKIES
+    content_snippet: "Message 3."
+    is_page_main: true
+    tag2sleep_s: {"original": .3, "modified": .3, "cached": .3, "no-cache": 3}
+
+  # Profile.
+  # Duplicates omitted:
+  #    Notifications.
+  - path: "/people/30c2ef608e5c0139d94f011df6dc47b7"
+    path_abbreviation: ""
+    cookies: *COOKIES
+    content_snippet: "Homer Simpson"
+    is_page_main: true
+    page_name: "Profile"
+    tag2sleep_s: {"original": .3, "modified": .3, "cached": .3, "no-cache": 10}
+  - path: "/people/30c2ef608e5c0139d94f011df6dc47b7/stream?_=1620109783129"
+    path_abbreviation: ""
+    cookies: *COOKIES
+    content_snippet: "I am an unauthorized Homer Simpson."
+    headers: *JSON_HEADERS

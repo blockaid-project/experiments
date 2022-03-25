@@ -10,7 +10,7 @@ import os
 import sys
 from time import time, sleep
 from timeit import default_timer as timer
-from typing import Dict, Iterable, List, Sequence, Set, TypeVar
+from typing import Dict, Iterable, List, Optional, Sequence, Set, TypeVar
 import urllib.parse
 
 import requests
@@ -29,9 +29,9 @@ class PathTest:
     path: str  # URL to load.
     path_abbreviation: str  # Abbreviation for URL shown in paper.
     cookies: Dict[str, str]  # Cookies to send when loading the URL.
-    content_snippet: str = None  # To make sure the correct content is fetched.
+    content_snippet: Optional[str]  # To make sure the correct content is fetched; if None, fetched content not checked.
     headers: Dict[str, str] = None  # Extra headers to send (e.g., XMLHttpRequest).
-    status_code: int = 200  # Expected status code.
+    status_code: int = 200  # Expected status code; ignored in PLT measurements (Selenium doesn't expose status code).
     is_page_main: bool = False  # True if this is a workload's main URL.  We measure PLTs for only main URLs.
     page_name: str = None  # Name of the page used in paper (e.g., "Simple post").  Can only set for main pages.
 
@@ -47,15 +47,19 @@ class PathTest:
 
     def __post_init__(self):
         if self.is_page_main:
-            assert self.tag2sleep_s is not None, "For a main page, sleep durations must be specified"
+            if self.download_file_name:
+                assert self.tag2sleep_s is None, f"Sleep durations do not apply to download: {self.path}"
+            else:
+                assert self.tag2sleep_s is not None,\
+                    f"For a non-download main page, sleep durations must be specified: {self.path}"
+            assert self.page_name, f"Page name for a main URL cannot be empty: {self.path}"
+            assert self.content_snippet is not None, f"A main URL must have a content snippet: {self.path}"
         else:
-            assert self.page_name is None, "Only main pages have names"
+            assert self.page_name is None, f"Only main pages have names: {self.path}"
             assert self.tag2sleep_s is None,\
-                "For a non-main page URL, sleep durations are meaningless and should not be specified"
+                f"For a non-main page URL, sleep durations are meaningless and should not be specified: {self.path}"
 
-        assert self.path_abbreviation, "path abbreviation cannot be empty"
-        if self.page_name is not None:
-            assert self.page_name, "page name (if provided) cannot be empty"
+        assert self.path_abbreviation, f"Path abbreviation cannot be empty: {self.path}"
 
 
 @dataclass(frozen=True)

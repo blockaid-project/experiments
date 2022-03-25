@@ -1,0 +1,66 @@
+---
+domain: "https://autolab.internal"
+student_cookies: &STUDENT_COOKIES
+  browser.timezone: "America/Los_Angeles"
+  _autolab3_session: "Z05Vdy8xT2RNWVRJWWNDVXVnRVVOYnpvcndlcmRjRVhvZzU2YlhEaHZmQlkrZEthQlh4KysxL2hUay9DajVCeVpMV2tEa3kzK1hZd0p5RVJlL1NsdlBna200Skh2M3dxZzF6cWt5QTRFODdRNDVCbWNZTXN4clJaS2kyOXJoYmhHVVhJUmU0b3hweVR6STR4TlZZTVBjVkk3RWpINDZ3SUJ0cnBBcDVPUVl1WVdjcFg5ZElVQUE5bTc2NkFhSUlCWmxJNVliRWpMTXNJMnpBNkhKV3dUK05ZSWZYV2FTazdZSHFnSDc0eFYyall0RVNkM0U1S3RkVEZwZmJRbkZtVC0tME9ndDdOZnY5L2ppWEd2dW9PSVB0QT09--ff52958aab49f35ac1743a6d689cf29af10142e8"
+instructor_cookies: &INSTRUCTOR_COOKIES
+  browser.timezone: "America/Los_Angeles"
+  _autolab3_session: "SGIrSWt5NkRaWlhQVVJlTi9MeHpLVTAxT0o0N2JLRDE5TnkvM0RqWFJMTXdFZlo5Z1RHazV4YnloMzBOYzZITXFxZmsrQnNJRGFkWkFRbWxJbTBkRzJwVnppeW5UNHFERk8yTjFDTFp0QmgxS2NIY1lERmpadjBncHAveXUrbEpqWVI0eWVvdkNxMFFCajlDa2crbWhyTHpZWHhsT25PSFA1UmVkcUpuaGZTYkhaNU90QUx6N0lObkNTVkhPZWpCT1hxWWNJSytFZjRaRHNiNy9ZR1RtOG56Q1NBUjJpQjZGakI0cjlvSlNscDVacWRLdGU2dE1RUEJsdGRWdnQ3Mi0tTis4MGxhdE5yS2p0OE5BaHBmbTVGdz09--25780005e9753dead742abbce8893950d8e19524"
+default_sleep_s: &DEFAULT_SLEEP_S
+  original: .2
+  modified: .2
+  cached: .2
+  no-cache: .2
+json_headers: &JSON_HEADERS
+  Accept: "application/json, text/javascript"
+  X-Requested-With: "XMLHttpRequest"
+path_tests:
+  # Home page.
+  - path: "/"
+    path_abbreviation: ""
+    cookies: *STUDENT_COOKIES
+    content_snippet: "Course2 (SEM)"
+    is_page_main: true
+    page_name: "Homepage"
+    tag2sleep_s: *DEFAULT_SLEEP_S
+
+  # Course.
+  - path: "/courses/Course0/assessments"
+    path_abbreviation: ""
+    cookies: *STUDENT_COOKIES
+    content_snippet: "Quiz 4"
+    is_page_main: true
+    page_name: "Course"
+    tag2sleep_s: {"original": .3, "modified": .3, "cached": .3, "no-cache": 3}
+  - path: "/courses/Course0/metrics/get_num_pending_instances"
+    path_abbreviation: ""
+    cookies: *STUDENT_COOKIES
+    content_snippet: ~ # No checking content for this one.
+    status_code: 403 # But we do check for status code.
+
+  # Assignment
+  - path: "/courses/Course0/assessments/quiz4"
+    path_abbreviation: ""
+    cookies: *STUDENT_COOKIES
+    content_snippet: "user0@foo.bar_0_handin.c"
+    is_page_main: true
+    page_name: "Assignment"
+    tag2sleep_s: *DEFAULT_SLEEP_S
+
+  # Submission
+  - path: "/courses/Course0/assessments/quiz4/submissions/26000028/download"
+    path_abbreviation: ""
+    cookies: *STUDENT_COOKIES
+    content_snippet: "printf"
+    is_page_main: true
+    page_name: "Submission"
+    download_file_name: "user0@foo.bar_quiz4_0_handin.c"
+
+  # Gradesheet
+  - path: "/courses/Course0/assessments/quiz4/viewGradesheet"
+    path_abbreviation: ""
+    cookies: *INSTRUCTOR_COOKIES
+    content_snippet: "user40@foo.bar"
+    is_page_main: true
+    page_name: "Gradesheet"
+    tag2sleep_s: *DEFAULT_SLEEP_S
