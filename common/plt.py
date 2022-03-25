@@ -3,7 +3,7 @@ import argparse
 import os.path
 import sys
 from time import time, sleep
-from typing import NamedTuple, Dict, List
+from typing import List
 import urllib.parse
 
 from selenium import webdriver
@@ -83,4 +83,3 @@ def do_measure(domain: str, path_tests: List[PathTest]) -> None:
                 print(f"{tag},{path_test.path},{i},{ts},{plt_ms:3g}", flush=True)
     finally:
         driver.close()
-
