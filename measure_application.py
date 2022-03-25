@@ -53,6 +53,10 @@ class PathTest:
             assert self.tag2sleep_s is None,\
                 "For a non-main page URL, sleep durations are meaningless and should not be specified"
 
+        assert self.path_abbreviation, "path abbreviation cannot be empty"
+        if self.page_name is not None:
+            assert self.page_name, "page name (if provided) cannot be empty"
+
 
 @dataclass(frozen=True)
 class TestConfig:
