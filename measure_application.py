@@ -10,7 +10,7 @@ import os
 import sys
 from time import time, sleep
 from timeit import default_timer as timer
-from typing import Callable, Dict, Iterable, Sequence, Set, TypeVar
+from typing import Dict, Iterable, Sequence, Set, TypeVar
 import urllib.parse
 
 import requests
@@ -23,7 +23,7 @@ import yaml
 T = TypeVar("T")
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass(frozen=True)
 class PathTest:
     """A test case specification for a URL."""
     path: str  # URL to load.
@@ -54,7 +54,7 @@ class PathTest:
                 "For a non-main page URL, sleep durations are meaningless and should not be specified"
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass(frozen=True)
 class TestConfig:
     measure_kind: str  # What we're measuring.
     tag: str  # Tag for this run (e.g., no-cache, cold-cache).
@@ -115,8 +115,7 @@ def measure_plt(config: TestConfig, path_test: PathTest, driver: WebDriver) -> f
     return plt_ms
 
 
-def do_tests(config: TestConfig, tests: Sequence[PathTest], measure_func: Callable[[TestConfig, PathTest, ...], float],
-             *extra_args) -> None:
+def do_tests(config: TestConfig, tests: Sequence[PathTest], measure_func, *extra_args) -> None:
     for _ in trange(config.warmup_rounds, desc="warmup"):
         for pi, path_test in enumerate(tests):
             measure_func(config, path_test, *extra_args)
@@ -153,8 +152,8 @@ def main() -> None:
                         help="what to measure -- page-load time or fetch duration")
     parser.add_argument("tag", type=str, help="tag for this run (e.g., no-cache, cold-cache)")
     parser.add_argument("config_path", type=str, help="path to the YAML configuration containing URLs to test")
-    parser.add_argument("--warmup-rounds", type=int, help="number of loads to perform for warm up")
-    parser.add_argument("--measure-rounds", type=int, help="number of loads to measure")
+    parser.add_argument("--warmup-rounds", type=int, default=2, help="number of loads to perform for warm up")
+    parser.add_argument("--measure-rounds", type=int, default=2, help="number of loads to measure")
     args = parser.parse_args()
 
     # Parse test configuration.
