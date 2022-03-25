@@ -143,12 +143,7 @@ def do_tests(config: TestConfig, tests: Sequence[PathTest], measure_func, extra_
                        timestamp_s=ts,
                        dur_ms=dur_ms)
             row.update({column: getattr(path_test, column) for column in extra_columns})
-            writer.writerow({"measure_kind": config.measure_kind,
-                             "tag": config.tag,
-                             "path": path_test.path,
-                             "round": i,
-                             "timestamp_s": ts,
-                             "dur_ms": dur_ms})
+            writer.writerow(row)
 
 
 def assert_no_duplicates(items: Iterable[T], name: str) -> None:
