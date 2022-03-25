@@ -10,7 +10,7 @@ import os
 import sys
 from time import time, sleep
 from timeit import default_timer as timer
-from typing import Dict, Iterable, Sequence, Set, TypeVar
+from typing import Dict, Iterable, List, Sequence, Set, TypeVar
 import urllib.parse
 
 import requests
@@ -115,19 +115,30 @@ def measure_plt(config: TestConfig, path_test: PathTest, driver: WebDriver) -> f
     return plt_ms
 
 
-def do_tests(config: TestConfig, tests: Sequence[PathTest], measure_func, *extra_args) -> None:
+def do_tests(config: TestConfig, tests: Sequence[PathTest], measure_func, extra_columns: List[str],
+             *extra_args) -> None:
+    if extra_columns is None:
+        extra_columns = []
+
     for _ in trange(config.warmup_rounds, desc="warmup"):
         for pi, path_test in enumerate(tests):
             measure_func(config, path_test, *extra_args)
 
     print("# " + " ".join(sys.argv))
-    writer = csv.DictWriter(sys.stdout,
-                            fieldnames=["measure_kind", "tag", "path", "round", "timestamp_s", "dur_ms"])
+    writer = csv.DictWriter(
+        sys.stdout, fieldnames=["measure_kind", "tag", "path", "round", "timestamp_s", "dur_ms"] + extra_columns)
     writer.writeheader()
     for i in trange(config.measure_rounds, desc="measure"):
         for pi, path_test in enumerate(tests):
             ts = time()
             dur_ms = measure_func(config, path_test, *extra_args)
+            row = dict(measure_kind=config.measure_kind,
+                       tag=config.tag,
+                       path=path_test.path,
+                       round=i,
+                       timestamp_s=ts,
+                       dur_ms=dur_ms)
+            row.update({column: getattr(path_test, column) for column in extra_columns})
             writer.writerow({"measure_kind": config.measure_kind,
                              "tag": config.tag,
                              "path": path_test.path,
@@ -184,12 +195,14 @@ def main() -> None:
             # https://www.selenium.dev/documentation/webdriver/browser/cookies/
             driver.get(urllib.parse.urljoin(config.domain, "foobar"))
 
-            do_tests(config, tests, measure_plt, driver)
+            # Only measure PLTs for the main URL of each page.
+            main_url_tests = [t for t in tests if t.is_page_main]
+            do_tests(config, main_url_tests, measure_plt, ["page_name"], driver)
         finally:
             driver.close()
     else:
         assert args.measure_kind == "fetch", f"invalid kind: {args.measure_kind}"
-        do_tests(config, tests, measure_fetch)
+        do_tests(config, tests, measure_fetch, ["path_abbreviation"])
 
 
 if __name__ == '__main__':
