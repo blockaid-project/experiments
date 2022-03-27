@@ -80,7 +80,8 @@ def measure_fetch(config: TestConfig, path_test: PathTest) -> float:
         kwargs["headers"] = path_test.headers
     r = requests.get(full_url, **kwargs)
     duration_s = timer() - start_s
-    assert r.status_code == path_test.status_code, r.status_code
+    assert r.status_code == path_test.status_code,\
+        f"for {path_test.path}, expected status is: {path_test.status_code}, but got status: {r.status_code}"
     if path_test.content_snippet is not None:
         assert path_test.content_snippet in r.text, r.text
     return duration_s * 1e3
