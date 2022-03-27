@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
+CYAN='\033[0;36m'
+NC='\033[0m' # No Color
+
 SLEEP_S=60
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
@@ -28,9 +31,9 @@ declare -A tag2cacheConfig=(
 declare -A tag2rounds
 if [[ -z "${TEST_RUN}" ]]
 then
-  tag2rounds=(["original"]=3 ["modified"]=3 ["cached"]=3 ["no-cache"]=3 ["cold-cache"]=3)
-else
   tag2rounds=(["original"]=3000 ["modified"]=3000 ["cached"]=3000 ["no-cache"]=100 ["cold-cache"]=100)
+else
+  tag2rounds=(["original"]=3 ["modified"]=3 ["cached"]=3 ["no-cache"]=3 ["cold-cache"]=3)
 fi
 
 for measure_kind in "${kinds[@]}"
@@ -41,12 +44,12 @@ do
     IFS=" " read -r -a tags <<< "${kind2tags[$measure_kind]}"
     for tag in "${tags[@]}"
     do
-      echo "Running: $measure_kind, $app_name, $tag..."
-
       env="${tag2env[$tag]}"
       cache_config="${tag2cacheConfig[$tag]}"
       rounds="${tag2rounds[$tag]}"
       output_dir="$experiment_output_dir/$measure_kind/$tag"
+
+      echo "${CYAN}Running: [$measure_kind, $app_name, $tag, rounds=$rounds]...${NC}"
 
       (
         mkdir -p "$output_dir"
