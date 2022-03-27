@@ -8,42 +8,42 @@ json_headers: &JSON_HEADERS
 path_tests:
   # Simple post.
   - path: "/posts/33000073"
-    path_abbreviation: ""
+    path_abbreviation: "D1"
     cookies: *COOKIES
     content_snippet: "Here's a post for my #family."
     is_page_main: true
     page_name: "Simple post"
     tag2sleep_s: {"original": .3, "modified": .3, "cached": .3, "no-cache": 5}
-  - path: "/notifications?per_page=10&page=1&_=1618953548170"
-    path_abbreviation: ""
-    cookies: *COOKIES
-    content_snippet: "unread_count"
-    headers: *JSON_HEADERS
   - path: "/posts/33000073/comments?_=1620113426256"
-    path_abbreviation: ""
+    path_abbreviation: "D2"
     cookies: *COOKIES
     content_snippet: "yay!"
+    headers: *JSON_HEADERS
+  - path: "/notifications?per_page=10&page=1&_=1618953548170"
+    path_abbreviation: "D9"
+    cookies: *COOKIES
+    content_snippet: "unread_count"
     headers: *JSON_HEADERS
 
   # Complex post.
   # Duplicates omitted:
   #    Notifications.
   - path: "/posts/33000071"
-    path_abbreviation: ""
+    path_abbreviation: "D3"
     cookies: *COOKIES
     content_snippet: "A fourth poll!"
     is_page_main: true
     page_name: "Complex post"
     tag2sleep_s: {"original": .3, "modified": .3, "cached": .3, "no-cache": 16}
   - path: "/posts/33000071/comments?_=1620109750030"
-    path_abbreviation: ""
+    path_abbreviation: "D4"
     cookies: *COOKIES
     content_snippet: "Nice poll!"
     headers: *JSON_HEADERS
 
   # Prohibited post.
   - path: "/posts/33000003"
-    path_abbreviation: ""
+    path_abbreviation: "D5"
     cookies: *COOKIES
     content_snippet: "The page you were looking for doesn't exist (404)"
     status_code: 404
@@ -55,7 +55,7 @@ path_tests:
   # Duplicates omitted:
   #    Notifications.
   - path: "/conversations?conversation_id=12000002"
-    path_abbreviation: ""
+    path_abbreviation: "D6"
     cookies: *COOKIES
     content_snippet: "Message 3."
     is_page_main: true
@@ -65,14 +65,14 @@ path_tests:
   # Duplicates omitted:
   #    Notifications.
   - path: "/people/30c2ef608e5c0139d94f011df6dc47b7"
-    path_abbreviation: ""
+    path_abbreviation: "D7"
     cookies: *COOKIES
     content_snippet: "Homer Simpson"
     is_page_main: true
     page_name: "Profile"
     tag2sleep_s: {"original": .3, "modified": .3, "cached": .3, "no-cache": 10}
   - path: "/people/30c2ef608e5c0139d94f011df6dc47b7/stream?_=1620109783129"
-    path_abbreviation: ""
+    path_abbreviation: "D8"
     cookies: *COOKIES
     content_snippet: "I am an unauthorized Homer Simpson."
     headers: *JSON_HEADERS

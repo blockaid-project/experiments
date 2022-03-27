@@ -17,7 +17,7 @@ json_headers: &JSON_HEADERS
 path_tests:
   # Home page.
   - path: "/"
-    path_abbreviation: ""
+    path_abbreviation: "A1"
     cookies: *STUDENT_COOKIES
     content_snippet: "Course2 (SEM)"
     is_page_main: true
@@ -26,21 +26,21 @@ path_tests:
 
   # Course.
   - path: "/courses/Course0/assessments"
-    path_abbreviation: ""
+    path_abbreviation: "A2"
     cookies: *STUDENT_COOKIES
     content_snippet: "Quiz 4"
     is_page_main: true
     page_name: "Course"
     tag2sleep_s: {"original": .3, "modified": .3, "cached": .3, "no-cache": 3}
   - path: "/courses/Course0/metrics/get_num_pending_instances"
-    path_abbreviation: ""
+    path_abbreviation: "A3"
     cookies: *STUDENT_COOKIES
     content_snippet: ~ # No checking content for this one.
     status_code: 403 # But we do check for status code.
 
   # Assignment
   - path: "/courses/Course0/assessments/quiz4"
-    path_abbreviation: ""
+    path_abbreviation: "A4"
     cookies: *STUDENT_COOKIES
     content_snippet: "user0@foo.bar_0_handin.c"
     is_page_main: true
@@ -49,7 +49,7 @@ path_tests:
 
   # Submission
   - path: "/courses/Course0/assessments/quiz4/submissions/26000028/download"
-    path_abbreviation: ""
+    path_abbreviation: "A5"
     cookies: *STUDENT_COOKIES
     content_snippet: "printf"
     is_page_main: true
@@ -58,7 +58,7 @@ path_tests:
 
   # Gradesheet
   - path: "/courses/Course0/assessments/quiz4/viewGradesheet"
-    path_abbreviation: ""
+    path_abbreviation: "A6"
     cookies: *INSTRUCTOR_COOKIES
     content_snippet: "user40@foo.bar"
     is_page_main: true
