@@ -59,6 +59,7 @@ path_tests:
     cookies: *COOKIES
     content_snippet: "Message 3."
     is_page_main: true
+    page_name: "Conversation"
     tag2sleep_s: {"original": .3, "modified": .3, "cached": .3, "no-cache": 3}
 
   # Profile.
