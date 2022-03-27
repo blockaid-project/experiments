@@ -47,7 +47,7 @@ do
       env="${tag2env[$tag]}"
       cache_config="${tag2cacheConfig[$tag]}"
       rounds="${tag2rounds[$tag]}"
-      output_dir="$experiment_output_dir/$measure_kind/$tag"
+      output_dir="$experiment_output_dir/$measure_kind/$app_name/$tag"
 
       echo -e "${CYAN}[$measure_kind, $app_name, $tag, rounds=$rounds] starting...${NC}"
 
