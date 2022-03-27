@@ -49,7 +49,7 @@ do
       rounds="${tag2rounds[$tag]}"
       output_dir="$experiment_output_dir/$measure_kind/$tag"
 
-      echo "${CYAN}Running: [$measure_kind, $app_name, $tag, rounds=$rounds]...${NC}"
+      echo -e "${CYAN}[$measure_kind, $app_name, $tag, rounds=$rounds] starting...${NC}"
 
       (
         mkdir -p "$output_dir"
