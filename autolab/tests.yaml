@@ -37,6 +37,7 @@ path_tests:
     cookies: *STUDENT_COOKIES
     content_snippet: ~ # No checking content for this one.
     status_code: 403 # But we do check for status code.
+    headers: *JSON_HEADERS
 
   # Assignment
   - path: "/courses/Course0/assessments/quiz4"
