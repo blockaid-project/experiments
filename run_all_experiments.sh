@@ -86,7 +86,7 @@ do
         --warmup-rounds="$rounds" --measure-rounds="$rounds" > "$output_dir/data.csv.tmp"
 
         killall java || true
-        (tar -czvf "$output_dir/server_log.tar.gz" "$output_dir/server.log" --remove-files)
+        (tar -czvf "$output_dir/server_log.tar.gz" -C "$output_dir" server.log --remove-files)
         mv "$output_dir/data.csv.tmp" "$output_dir/data.csv"
       )
     done
