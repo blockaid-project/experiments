@@ -54,7 +54,7 @@ do
       (
         mkdir -p "$output_dir"
         if [ -f "$output_dir/data.csv" ]; then
-            echo "[$measure_kind, $app_name, $tag] data already found in $output_dir; skipping this experiment..."
+            echo "data already found in $output_dir; skipping this experiment..."
             exit 0
         fi
 
