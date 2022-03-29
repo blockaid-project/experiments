@@ -12,6 +12,7 @@ log_file_path=${3:?please provide path to output log file}
 
 killall java || true
 cd "$autolab_path" || { echo "Autolab path not found: $autolab_path"; exit 1; }
+rm -f log/*.log*
 rm -f shared/log/puma.std*
 
 case "$env" in

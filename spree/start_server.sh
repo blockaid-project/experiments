@@ -13,6 +13,7 @@ log_file_path=${3:?please provide path to output log file}
 killall java || true
 cd "$spree_path" || { echo "Spree path not found: $spree_path"; exit 1; }
 cd sandbox || { echo "Spree sandbox path not found: $spree_path/sandbox"; exit 1; }
+rm -f log/*.log*
 rm -f shared/log/puma.std*
 
 case "$env" in

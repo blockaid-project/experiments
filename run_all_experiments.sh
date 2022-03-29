@@ -4,7 +4,6 @@ set -e
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
-SLEEP_S=60
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 experiment_output_dir=${1:?please provide output directory for this experiment}

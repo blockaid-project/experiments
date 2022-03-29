@@ -12,6 +12,7 @@ log_file_path=${3:?please provide path to output log file}
 
 killall java || true
 cd "$diaspora_path" || { echo "diaspora path not found: $diaspora_path"; exit 1; }
+rm -f log/*.log*
 rm -f shared/log/puma.std*
 
 case "$env" in
