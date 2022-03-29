@@ -158,6 +158,25 @@ def assert_no_duplicates(items: Iterable[T], name: str) -> None:
         seen.add(item)
 
 
+def wait_for_web_server(domain: str, timeout_s: int) -> None:
+    """Waits for web server to start up."""
+    url = urllib.parse.urljoin(domain, "foobar")  # Non-existent URL.
+
+    print("Waiting for server to start up.", file=sys.stderr, flush=True, end="")
+    for _ in range(timeout_s):
+        sleep(1)
+        r = requests.get(url, verify=False)
+        print(".", file=sys.stderr, flush=True, end="")
+        if r.status_code == requests.codes.bad_gateway:  # A 502 indicates the server is not yet ready.
+            continue
+        elif r.status_code == requests.codes.not_found:  # A 404 indicates the server is ready.
+            return
+        else:
+            raise Exception(f"wait_for_web_server: unexpected status code: {r.status_code}")
+
+    raise Exception(f"wait_for_web_server: web server not ready after {timeout_s} seconds")
+
+
 def main() -> None:
     """Entry point for the script."""
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)  # Suppresses warnings for self-signed certs.
@@ -187,6 +206,8 @@ def main() -> None:
     assert_no_duplicates((test.path for test in tests), "path")
     assert_no_duplicates((test.path_abbreviation for test in tests), "path abbreviation")
     assert_no_duplicates((test.page_name for test in tests if test.page_name is not None), "page name")
+
+    wait_for_web_server(config.domain, timeout_s=60)
 
     if args.measure_kind == "plt":
         chrome_options = webdriver.ChromeOptions()

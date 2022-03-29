@@ -71,17 +71,6 @@ do
         fi
 
         "$experiment_config_path/start_server.sh" "$env" "$app_path" "$output_dir/server.log" &
-        echo "Waiting $SLEEP_S seconds for web server to start up..."
-        sleep "$SLEEP_S"
-
-        # TODO(zhangwen): look for the web server process directly using its PID file.
-        if ! pgrep -x "java" > /dev/null
-        then
-          echo "FATAL: Web server is not running."
-          cat "$output_dir/server.log"
-          exit 1
-        fi
-
         numactl -N 1 -m 1 "$SCRIPT_DIR/measure_latency.py" "$measure_kind" "$tag" "$experiment_config_path/tests.yaml" \
         --warmup-rounds="$rounds" --measure-rounds="$rounds" > "$output_dir/data.csv.tmp"
 
