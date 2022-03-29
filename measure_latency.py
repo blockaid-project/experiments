@@ -118,7 +118,7 @@ def measure_plt(config: TestConfig, path_test: PathTest, driver: WebDriver) -> f
     navigation_start = driver.execute_script("return window.performance.timing.navigationStart")
     load_event_end = driver.execute_script("return window.performance.timing.loadEventEnd")
     source = driver.page_source
-    assert path_test.content_snippet in source, f"snippet not found in: {source}"
+    assert path_test.content_snippet in source, f"snippet not found in: {path_test.page_name} ({path_test.path}); source: {source}"
     plt_ms = load_event_end - navigation_start
     sleep(path_test.tag2sleep_s[config.tag])
     return plt_ms
