@@ -71,7 +71,8 @@ do
 
         "$experiment_config_path/start_server.sh" "$env" "$app_path" "$output_dir/server.log" &
         numactl -N 1 -m 1 "$SCRIPT_DIR/measure_latency.py" "$measure_kind" "$tag" "$experiment_config_path/tests.yaml" \
-        --warmup-rounds="$rounds" --measure-rounds="$rounds" > "$output_dir/data.csv.tmp"
+            --warmup-rounds="$rounds" --measure-rounds="$rounds" > "$output_dir/data.csv.tmp" \
+          || { cat "$output_dir/server.log"; exit 1; }
 
         killall java || true
         (tar -czvf "$output_dir/server_log.tar.gz" -C "$output_dir" server.log --remove-files)
