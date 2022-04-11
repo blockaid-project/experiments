@@ -32,5 +32,6 @@ case "$env" in
 esac
 
 git checkout "$branch"
+git pull --ff-only
 bundle install >/dev/null
 RAILS_ENV=$env numactl -N 0 -m 0 bundle exec rails server > "$log_file_path" 2>&1

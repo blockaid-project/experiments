@@ -17,7 +17,7 @@ rm -f shared/log/puma.std*
 
 case "$env" in
   production | production_mod | production_mod_checked)
-    branch="main"
+    branch="blockaid"
     ;;
 
   *)
@@ -27,4 +27,5 @@ case "$env" in
 esac
 
 git checkout "$branch"
+git pull --ff-only
 RAILS_ENV=$env numactl -N 0 -m 0 bundle exec rails server puma > "$log_file_path" 2>&1
