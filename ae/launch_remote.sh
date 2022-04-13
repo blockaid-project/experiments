@@ -19,11 +19,11 @@ if [[ -z "${TEST_RUN}" ]]
 then
   env=""
 else
-  env="TEST_RUN=1"
+  env="export TEST_RUN=1;"
 fi
 
 ip="10.10.1.$idx"
-ssh -o StrictHostKeyChecking=no "$ip" bash -c "$env $SCRIPT_DIR/agent.sh $measure_kind $app_name $OUTPUT_DIR"
+ssh -o StrictHostKeyChecking=no "$ip" "$env $SCRIPT_DIR/agent.sh $measure_kind $app_name $OUTPUT_DIR"
 
 mkdir -p "$AGGREGATE_DIR"
 rsync -e "ssh -o StrictHostKeyChecking=no" -r "$ip:$OUTPUT_DIR/" "$AGGREGATE_DIR/"
