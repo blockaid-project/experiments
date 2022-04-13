@@ -2,15 +2,34 @@
 set -e
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-OUTPUT_DIR="$HOME/ae_data"
 
 # Update Blockaid.
 (cd "$HOME/privacy_proxy"; git pull --ff-only; mvn compile assembly:single)
 
-# Assumes EC2 user data is a text file where each line has the form "kind app".
-curl http://169.254.169.254/latest/user-data | while IFS= read -r line; do
-  line_array=("$line")
-  kind="${line_array[0]}"
-  app="${line_array[1]}"
-  "$SCRIPT_DIR/run_experiment.sh" "$kind" "$app" "$OUTPUT_DIR"
+apps=(diaspora spree autolab)
+kinds=(plt fetch)
+
+if [[ -z "${TEST_RUN}" ]]
+then
+  env="TEST_RUN=1"
+else
+  env=""
+fi
+
+tmux_config=()
+
+num_left=$(( ${#apps[@]} * ${#kinds[@]} ))
+curr=1
+for measure_kind in "${kinds[@]}"
+do
+  for app_name in "${apps[@]}"
+  do
+    tmux_config+=("send-keys '$env $SCRIPT_DIR/run_ae_remote.sh $curr $measure_kind $app_name'")
+    percentage=$(( (num_left - 1) / num_left ))
+    tmux_config+=("split-window -v -p $percentage")
+    curr=$((curr+1))
+    num_left=$((num_left-1))
+  done
 done
+
+# TODO(zhangwen): shut down instances.
