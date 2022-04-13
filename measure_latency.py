@@ -211,7 +211,7 @@ def main() -> None:
     assert_no_duplicates((test.path_abbreviation for test in tests), "path abbreviation")
     assert_no_duplicates((test.page_name for test in tests if test.page_name is not None), "page name")
 
-    wait_for_web_server(config.domain, timeout_s=60)
+    wait_for_web_server(config.domain, timeout_s=180)
 
     if args.measure_kind == "plt":
         chrome_options = webdriver.ChromeOptions()
