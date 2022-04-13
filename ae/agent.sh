@@ -2,7 +2,7 @@
 set -e
 
 source "$HOME/.profile"
-workon experiment
+workon experiments
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 "$SCRIPT_DIR/../run_experiment.sh" "$@"
