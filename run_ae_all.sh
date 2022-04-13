@@ -4,12 +4,6 @@ set -e
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 TMUX_CONF="/tmp/tmux.ae.conf"
 
-# Update Blockaid.
-if [[ -z "${SKIP_PULL}" ]]
-then
-  (cd "$HOME/privacy_proxy"; git pull --ff-only; mvn compile assembly:single)
-fi
-
 apps=(diaspora spree autolab)
 kinds=(plt fetch)
 
