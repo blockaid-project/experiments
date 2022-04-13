@@ -28,7 +28,7 @@ for measure_kind in "${kinds[@]}"
 do
   for app_name in "${apps[@]}"
   do
-    tmux_config+=("send-keys '$env $SCRIPT_DIR/run_ae_remote.sh $curr $measure_kind $app_name' C-m")
+    tmux_config+=("send-keys '$env $SCRIPT_DIR/ae/launch_remote.sh $curr $measure_kind $app_name' C-m")
     if [[ "$num_left" -ne 1 ]]
     then
       percentage=$(( 100 * (num_left - 1) / num_left ))
