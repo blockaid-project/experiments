@@ -17,13 +17,13 @@ app_name="$3"
 
 if [[ -z "${TEST_RUN}" ]]
 then
-  env="TEST_RUN=1"
-else
   env=""
+else
+  env="TEST_RUN=1"
 fi
 
 ip="10.10.1.$idx"
-command="workon experiment; $env $SCRIPT_DIR/run_experiment.sh $measure_kind $app_name $OUTPUT_DIR"
+command="source $HOME/.profile; workon experiment; $env $SCRIPT_DIR/run_experiment.sh $measure_kind $app_name $OUTPUT_DIR"
 ssh -o StrictHostKeyChecking=no "$ip" bash -c "$command"
 
 mkdir -p "$AGGREGATE_DIR"
