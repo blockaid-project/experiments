@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
-set -e
-
 output_dir=${1:?please provide output dir}
 
-user_data=$(curl http://169.254.169.254/latest/user-data)
-user_data_array=("$user_data")
+# Expect user data to have the form "measure_kind app_name".
+user_data=$(curl -s http://169.254.169.254/latest/user-data)
+IFS=' ' read -r -a user_data_array <<< "$user_data"
 measure_kind="${user_data_array[0]}"
 app_name="${user_data_array[1]}"
 
