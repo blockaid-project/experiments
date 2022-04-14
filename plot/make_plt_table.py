@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
+import argparse
 from pathlib import Path
 import sys
-from typing import List
 
 import pandas as pd
 import yaml
@@ -10,24 +10,29 @@ EXPERIMENTS_DIR = Path(__file__).parent.resolve().parent
 APP_NAMES = ("diaspora", "spree", "autolab")
 
 
-def format_duration(dur_ms: float) -> str:
+def format_duration(dur_ms: float, use_siunitx: bool) -> str:
     """
     If under 1000 ms, returns the millisecond duration as an integer (with no units); otherwise, returns duration in
     seconds (with ``s'').
     """
     if dur_ms < 1000:
         return f"{dur_ms:.0f}"
-    return r"\\SI{" + f"{dur_ms/1000:.2g}" + "}{s}"
+
+    if use_siunitx:
+        return r"\\SI{" + f"{dur_ms/1000:.2g}" + "}{s}"
+    else:
+        return f"{dur_ms/1000:.2g} s"
 
 
-def print_app_data(data_directory: Path, app_name: str) -> None:
+def print_app_data(data_directory: Path, app_name: str, use_siunitx: bool) -> None:
     # Load experiment data.
     df = pd.concat([pd.read_csv(p, comment='#') for p in (data_directory / app_name).glob("*/*.csv")])
     assert (df["measure_kind"] == "plt").all()
     dur_agg = df.groupby(["path", "tag"]).dur_ms.quantile([.5, .95])
 
+    _format_duration = lambda _dur: format_duration(_dur, use_siunitx)
     def _dur_str(_path: str, _tag: str) -> str:
-        return " / ".join(map(format_duration, dur_agg[_path, _tag]))
+        return " / ".join(map(_format_duration, dur_agg[_path, _tag]))
 
     # Load application experiment metadata.
     with (EXPERIMENTS_DIR / app_name / "tests.yaml").open("r") as f:
@@ -46,9 +51,10 @@ def print_app_data(data_directory: Path, app_name: str) -> None:
 
 
 def main():
-    if len(sys.argv) != 2:
-        print(f"Usage: {sys.argv[0]} data_directory", file=sys.stderr)
-        sys.exit(1)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("data_directory")
+    parser.add_argument("--no-siunitx", action="store_true")
+    args = parser.parse_args()
 
     print(r"""
 \begin{tabular}{lrrrr}
@@ -58,9 +64,9 @@ def main():
 & Original & Modified & Cached & No cache \\ \midrule
     """)
 
-    data_directory = Path(sys.argv[1]) / "plt"
+    data_directory = Path(args.data_directory) / "plt"
     for app_name in APP_NAMES:
-        print_app_data(data_directory, app_name)
+        print_app_data(data_directory, app_name, use_siunitx=not args.no_siunitx)
 
     print(r"\end{tabular}")
 
