@@ -1,4 +1,5 @@
 ---
+app_name: "Autolab"
 domain: "https://autolab.internal"
 student_cookies: &STUDENT_COOKIES
   browser.timezone: "America/Los_Angeles"

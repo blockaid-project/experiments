@@ -1,4 +1,5 @@
 ---
+app_name: "Spree"
 domain: "https://spree.internal"
 cookies: &COOKIES
   _sandbox_session: "aoc8grbTyXP1HadR57HaWH%2BucA7fDOkOLPvabRWS0jSAmkyGLVClkcPM%2B9ao9JS8SmAXTzbqyWwrHNQ9%2FUHuZvddu%2F6SvAwgG6G6q53oENOAAG4ZpzahTO4m8790L%2BKCp%2B6e%2Fpn5JcO2qtyiq5%2FUeClgrAFuMgJHHeUeI29IUAwmX%2FqJx0UtCOPcw2WArQZVzAiS3kQ3grQLmaTrpWs8jxbIgHrylKiSS1bVzFEjqC5HICr2%2F%2FqjXXptr%2Fq%2FQDoknHO9Irkx95OY0CtN0wq4rp8gjZvuDnfzPvncqJ%2BXgPjcJp7NJRj0fN7WaVnmzDHAPx1EIqAByYz6%2FspdjBgwA4Ch788SaAgCljB44D6hHMi4lFvlQyKL1nkBL5BnThRoTJVkO3rZQU4%2BsMwiP1Jq2lStSqzK7NWjwQzEMdiHAXFNSpVOjCfwt3gWNAkYbJwx--0KQufZJcAcD8bwDu--f8HJKLOFeLbW9UAH4Tz5dA%3D%3D"
