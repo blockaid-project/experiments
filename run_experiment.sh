@@ -54,7 +54,7 @@ case $RUN_MODE in
     ;;
 
   small)
-    tag2rounds=(["original"]=3000 ["modified"]=3000 ["cached"]=3000 ["no-cache"]=100 ["cold-cache"]=100)
+    tag2rounds=(["original"]=300 ["modified"]=300 ["cached"]=300 ["no-cache"]=10 ["cold-cache"]=10)
     ;;
 
   full)
