@@ -45,13 +45,28 @@ declare -A tag2cacheConfig=(
   ["cached"]="cache" ["no-cache"]="no-cache" ["cold-cache"]="cold-cache"
 )
 
+: "${RUN_MODE:?Must provide run mode}"
 declare -A tag2rounds
-if [[ -z "${TEST_RUN}" ]]
-then
-  tag2rounds=(["original"]=3000 ["modified"]=3000 ["cached"]=3000 ["no-cache"]=100 ["cold-cache"]=100)
-else
-  tag2rounds=(["original"]=3 ["modified"]=3 ["cached"]=3 ["no-cache"]=3 ["cold-cache"]=3)
-fi
+case $RUN_MODE in
+
+  test)
+    tag2rounds=(["original"]=3 ["modified"]=3 ["cached"]=3 ["no-cache"]=3 ["cold-cache"]=3)
+    ;;
+
+  small)
+    tag2rounds=(["original"]=3000 ["modified"]=3000 ["cached"]=3000 ["no-cache"]=100 ["cold-cache"]=100)
+    ;;
+
+  full)
+    tag2rounds=(["original"]=3000 ["modified"]=3000 ["cached"]=3000 ["no-cache"]=100 ["cold-cache"]=100)
+    ;;
+
+  *)
+    echo "FATAL: Unrecognized run mode: $RUN_MODE"
+    exit 1
+    ;;
+
+esac
 
 app_path="${app2path[$app_name]}"
 IFS=" " read -r -a tags <<< "${kind2tags[$measure_kind]}"
