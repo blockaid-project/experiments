@@ -22,7 +22,7 @@ import yaml
 
 T = TypeVar("T")
 
-NUM_RETRIES = 20
+NUM_RETRIES = 3
 RETRY_SLEEP_DUR_S = 10
 
 
@@ -137,8 +137,8 @@ def do_tests(config: TestConfig, tests: Sequence[PathTest], measure_func, extra_
             try:
                 return measure_func(*_args, **_kwargs)
             except AssertionError as _e:
-                print(_e, file=sys.stderr)
-                print(f"Retrying {_i+1}/{NUM_RETRIES}...", file=sys.stderr)
+                print(_e, file=sys.stderr, flush=True)
+                print(f"Retrying {_i+1}/{NUM_RETRIES}...", file=sys.stderr, flush=True)
                 sleep(RETRY_SLEEP_DUR_S)
 
         assert False, f"failed after {NUM_RETRIES} attempts"
