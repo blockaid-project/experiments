@@ -22,6 +22,9 @@ import yaml
 
 T = TypeVar("T")
 
+NUM_RETRIES = 20
+RETRY_SLEEP_DUR_S = 10
+
 
 @dataclass(frozen=True)
 class PathTest:
@@ -130,15 +133,15 @@ def do_tests(config: TestConfig, tests: Sequence[PathTest], measure_func, extra_
         extra_columns = []
 
     def _measure_func_with_retry(*_args, **_kwargs) -> float:
-        for _ in range(3):
+        for _i in range(NUM_RETRIES):
             try:
                 return measure_func(*_args, **_kwargs)
-            except AssertionError as e:
-                print(e, file=sys.stderr)
-                print("Retrying...", file=sys.stderr)
-                sleep(10)
+            except AssertionError as _e:
+                print(_e, file=sys.stderr)
+                print(f"Retrying {_i+1}/{NUM_RETRIES}...", file=sys.stderr)
+                sleep(RETRY_SLEEP_DUR_S)
 
-        assert False, "failed after retries"
+        assert False, f"failed after {NUM_RETRIES} attempts"
 
     for _ in trange(config.warmup_rounds, desc="warmup"):
         for pi, path_test in enumerate(tests):
