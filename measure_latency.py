@@ -129,9 +129,20 @@ def do_tests(config: TestConfig, tests: Sequence[PathTest], measure_func, extra_
     if extra_columns is None:
         extra_columns = []
 
+    def _measure_func_with_retry(*_args, **_kwargs) -> float:
+        for _ in range(3):
+            try:
+                return measure_func(*_args, **_kwargs)
+            except AssertionError as e:
+                print(e, file=sys.stderr)
+                print("Retrying...", file=sys.stderr)
+                sleep(10)
+
+        assert False, "failed after retries"
+
     for _ in trange(config.warmup_rounds, desc="warmup"):
         for pi, path_test in enumerate(tests):
-            measure_func(config, path_test, *extra_args)
+            _measure_func_with_retry(config, path_test, *extra_args)
 
     print("# " + " ".join(sys.argv))
     writer = csv.DictWriter(
@@ -140,7 +151,7 @@ def do_tests(config: TestConfig, tests: Sequence[PathTest], measure_func, extra_
     for i in trange(config.measure_rounds, desc="measure"):
         for pi, path_test in enumerate(tests):
             ts = time()
-            dur_ms = measure_func(config, path_test, *extra_args)
+            dur_ms = _measure_func_with_retry(config, path_test, *extra_args)
             row = dict(measure_kind=config.measure_kind,
                        tag=config.tag,
                        path=path_test.path,
@@ -178,7 +189,6 @@ def wait_for_web_server(domain: str, timeout_s: int) -> None:
         raise Exception(f"wait_for_web_server: web server not ready after {timeout_s} seconds")
     finally:
         print(file=sys.stderr)  # Print a newline.
-
 
 
 def main() -> None:
