@@ -47,6 +47,7 @@ ggplot(agg.data, aes(x = path_abbreviation, y = dur_ms_50, color = Configuration
     facet_grid(.~app_name, scales = "free", switch = "x", space = "free_x") +
     theme_bw(base_size = 8) +
     scale_y_continuous(trans='log10', breaks=c(10, 100, 1000, 10000, 100000), labels = c("\\SI{10}{ms}", "\\SI{100}{ms}", "\\SI{1}{s}", "\\SI{10}{s}", "\\SI{100}{s}")) +
+    scale_color_manual(values=c("#332288", "#CC6677", "#117733", "#AA4499", "#117733")) +
     xlab("URL") +
     ylab("Median fetch time (log scale)") +
     theme(
