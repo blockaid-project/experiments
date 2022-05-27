@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import argparse
+from contextlib import ExitStack
 from pathlib import Path
+from typing import Optional, TextIO
 
 import pandas as pd
 import yaml
@@ -18,12 +20,12 @@ def format_duration(dur_ms: float, use_siunitx: bool) -> str:
         return f"{dur_ms:.0f}"
 
     if use_siunitx:
-        return r"\\SI{" + f"{dur_ms/1000:.2g}" + "}{s}"
+        return r"\SI{" + f"{dur_ms/1000:.2g}" + "}{s}"
     else:
         return f"{dur_ms/1000:.2g} s"
 
 
-def print_app_data(data_directory: Path, app_name: str, use_siunitx: bool) -> None:
+def print_app_data(data_directory: Path, app_name: str, use_siunitx: bool, overheads_file: Optional[TextIO]) -> None:
     # Load experiment data.
     df = pd.concat([pd.read_csv(p, comment='#') for p in (data_directory / app_name).glob("*/*.csv")])
     assert (df["measure_kind"] == "plt").all()
@@ -48,11 +50,23 @@ def print_app_data(data_directory: Path, app_name: str, use_siunitx: bool) -> No
               + " & " + _dur_str(path, "cached")
               + " & " + _dur_str(path, "no-cache") + r" \\")
 
+        if overheads_file is not None:
+            original = dur_agg[path, "original"]
+            cached = dur_agg[path, "cached"]
+            modified = dur_agg[path, "modified"]
+            no_cache = dur_agg[path, "no-cache"]
+
+            cached_over_modified   = ",".join(map(str, (cached - modified) / modified))
+            no_cache_over_modified = ",".join(map(str, (no_cache - modified) / modified))
+            modified_over_original = ",".join(map(str, (modified - original) / original))
+            print(f"{app_name},{path_test['page_name']},{cached_over_modified},{no_cache_over_modified},{modified_over_original}", file=overheads_file)
+
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="Prints LaTeX table for page load times")
     parser.add_argument("data_directory")
-    parser.add_argument("--no-siunitx", action="store_true")
+    parser.add_argument("--no-siunitx", action="store_true", help="do not use siunitx")
+    parser.add_argument("--overheads-output-path", type=str, help="print overhead CSV to this path")
     args = parser.parse_args()
 
     print(r"""
@@ -63,12 +77,20 @@ def main():
 & Original & Modified & Cached & No cache \\ \midrule
     """)
 
-    data_directory = Path(args.data_directory) / "plt"
-    for app_name in APP_NAMES:
-        print_app_data(data_directory, app_name, use_siunitx=not args.no_siunitx)
+    with ExitStack() as stack:
+        if args.overheads_output_path is not None:
+            overheads_file = stack.enter_context(open(args.overheads_output_path, "w"))
+            print("app,path,cached/modified50,cached/modified95,no_cache/modified50,no_cache/modified95,modified/original50,modified/original95", file=overheads_file)
+        else:
+            overheads_file = None
 
-    print(r"\end{tabular}")
+        data_directory = Path(args.data_directory) / "plt"
+        for app_name in APP_NAMES:
+            print_app_data(data_directory, app_name, use_siunitx=not args.no_siunitx, overheads_file=overheads_file)
+
+        print(r"\end{tabular}")
 
 
 if __name__ == '__main__':
     main()
+
