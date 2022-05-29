@@ -67,7 +67,7 @@ def main():
     for app_name in APP_NAMES:
         print_app_data(data_directory, app_name, use_siunitx=not args.no_siunitx)
 
-    print(r"\end{tabular}")
+    print(r"\bottomrule\end{tabular}")
 
 
 if __name__ == '__main__':
